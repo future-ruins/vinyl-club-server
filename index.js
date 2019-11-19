@@ -26,12 +26,12 @@ const authRouter = require('./auth/routerAuth');
 const routerUser = require('./Routers/routerUser');
 const routerArtist = require('./Routers/routerArtist');
 const routerRecord = require('./Routers/routerRecord');
-const routerComments = require('./Routers/routerComment');
+const routerComment = require('./Routers/routerComment');
 
-app.use(authRouter, routerUser, routerArtist, routerRecord, routerComments);
+app.use(authRouter, routerUser, routerRecord, routerArtist, routerComment);
 
 // Sync Db and create default data
-db.sync({ force: false })
+db.sync({ force: true })
   .then(() => console.log('Database successfully created'))
   .catch((error) => {
     console.error('Unable to create tables', error);

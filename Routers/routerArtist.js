@@ -27,3 +27,5 @@ router.get('/artists', (request, response, next) => {
     })
     .catch((error) => next(error));
 });
+
+module.exports = router;

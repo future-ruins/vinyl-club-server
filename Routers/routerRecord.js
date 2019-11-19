@@ -6,31 +6,25 @@ const auth = require('../auth/authMiddleware');
 const { toData } = require('../auth/jwt');
 
 // Logged in user can post a Record (auth)
-router.post('/artist/:id/records', auth, (request, response, next) => {
+router.post('/artist/:id/record', auth, (request, response, next) => {
   const auth =
     request.headers.authorization && request.headers.authorization.split(' ');
-  // Convert token to readable data and store only the userId
   const loggedInUserId = toData(auth[1]).userId;
 
-  Artist.findByPk(parseInt(request.params.id))
-    .then((artist) => {
-      if (!artist) {
-        return response.status(404).send({ message: 'Artist not found' });
-      } else {
-        const newRecordForArtist = {
-          title: request.body.title,
-          description: request.body.description,
-          format: request.body.format,
-          genre: request.body.genre,
-          img: request.body.img,
-          artistId: request.params.id,
-          userId: loggedInUserId,
-        };
-        Record.create(newRecordForArtist).then((result) => {
-          //console.log('result', result.dataValues);
-          return response.status(201).send(result);
-        });
-      }
+  const newRecord = {
+    title: request.body.title,
+    description: request.body.description,
+    format: request.body.format,
+    genre: request.body.genre,
+    img: request.body.img,
+    artistId: parseInt(request.params.id),
+    userId: loggedInUserId,
+  };
+
+  Record.create(newRecord)
+    .then((result) => {
+      //console.log('result', result.dataValues);
+      return response.status(201).send(result);
     })
     .catch((error) => next(error));
 });
@@ -67,20 +61,32 @@ router.get('/artist/:id/records', (request, response, next) => {
   });
 });
 
-// Logged in user can edit a Record he/she posted (auth)
-
-router.put('/record/:id', auth, (request, response) => {
+// Logged in user can edit a Record he/she posted
+router.put('/record/:id', auth, (request, response, next) => {
+  const { title, description, format, genre, img } = request.body;
   Record.findByPk(parseInt(request.params.id))
     .then((record) => {
-      // Split auth type and token from header
       const auth =
         request.headers.authorization &&
         request.headers.authorization.split(' ');
-      // Convert token to readable data and store only the userId
       const loggedInUserId = toData(auth[1]).userId;
+
       if (record.userId === loggedInUserId) {
-        return Record.update(request.body).then((record) => {
-          return response.json(record);
+        return Record.update(
+          {
+            title: title,
+            description: description,
+            format: format,
+            genre: genre,
+            img: img,
+          },
+          {
+            where: {
+              id: request.params.id,
+            },
+          }
+        ).then((record) => {
+          return response.status(201).send(record);
         });
       } else if (record.userId !== loggedInUserId) {
         return response.status(401).end();
@@ -88,17 +94,10 @@ router.put('/record/:id', auth, (request, response) => {
         return response.status(404).send({ message: 'Record not found' });
       }
     })
-    .catch((error) => {
-      if (error.name === 'SequelizeValidationError') {
-        return response.status(422).send({ message: 'Not all data provided' });
-      } else {
-        return response.status(400).end();
-      }
-    });
+    .catch((error) => next(error));
 });
 
 // Logged in user can delete a Record he/she posted (auth, identify the user)
-
 router.delete('/record/:id', auth, (request, response) => {
   Record.findByPk(parseInt(request.params.id))
     .then((record) => {

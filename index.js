@@ -31,7 +31,7 @@ const routerComment = require('./Routers/routerComment');
 app.use(authRouter, routerUser, routerRecord, routerArtist, routerComment);
 
 // Sync Db and create default data
-db.sync({ force: true })
+db.sync({ force: false })
   .then(() => console.log('Database successfully created'))
   .catch((error) => {
     console.error('Unable to create tables', error);

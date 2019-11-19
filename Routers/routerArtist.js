@@ -1,8 +1,18 @@
 const { Router } = require('express');
 const router = new Router();
 const Artist = require('../Models/Artist');
+const auth = require('../auth/authMiddleware');
 
-// Anyone can read a single Artist resource
+router.post('/artist', auth, (request, response, next) => {
+  const newArtist = {
+    name: request.body.name,
+    img: request.body.img,
+  };
+  Artist.create(newArtist)
+    .then((artist) => response.send(artist))
+    .catch(next);
+});
+
 router.get('/artist/:id', (request, response, next) => {
   Artist.findByPk(parseInt(request.params.id))
     .then((artist) => {
@@ -15,15 +25,10 @@ router.get('/artist/:id', (request, response, next) => {
     .catch((error) => next(error));
 });
 
-// Get all Artists
 router.get('/artists', (request, response, next) => {
   Artist.findAll()
-    .then((response) => {
-      if (!artists) {
-        return response.status(404).send({ message: 'Artists not found' });
-      } else {
-        return response.send(artists);
-      }
+    .then((artists) => {
+      return response.send(artists);
     })
     .catch((error) => next(error));
 });

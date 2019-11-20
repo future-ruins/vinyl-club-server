@@ -5,29 +5,6 @@ const Artist = require('../Models/Artist');
 const auth = require('../auth/authMiddleware');
 const { toData } = require('../auth/jwt');
 
-// Logged-in user can post a Record
-router.post('/artist/:id/record', auth, (request, response, next) => {
-  const auth =
-    request.headers.authorization && request.headers.authorization.split(' ');
-  const loggedInUserId = toData(auth[1]).userId;
-  const newRecord = {
-    title: request.body.title,
-    description: request.body.description,
-    format: request.body.format,
-    genre: request.body.genre,
-    img: request.body.img,
-    artistId: parseInt(request.params.id),
-    userId: loggedInUserId,
-  };
-
-  Record.create(newRecord)
-    .then((result) => {
-      //console.log('result', result.dataValues);
-      return response.status(201).send(result);
-    })
-    .catch((error) => next(error));
-});
-
 // Anyone can read a single Record resource
 router.get('/record/:id', (request, response, next) => {
   Record.findByPk(parseInt(request.params.id))
@@ -49,7 +26,7 @@ router.get('/artist/:id/records', (request, response, next) => {
       .then((records) => {
         if (records.length === 0) {
           return response
-            .status(204)
+            .status(404)
             .send({ message: 'No Records for this artist' });
         } else {
           return response.send(records);
@@ -57,6 +34,52 @@ router.get('/artist/:id/records', (request, response, next) => {
       })
       .catch((error) => next(error));
   });
+});
+
+// Anyone can view all Records (9 per page)
+router.get('/records/page/:num', (request, response, next) => {
+  const page = parseInt(request.params.num);
+  const limit = 9;
+  let offset = 0;
+  if (page >= 1) {
+    offset = page * limit;
+  }
+  Record.findAndCountAll({ limit, offset, order: [['createdAt', 'DESC']] })
+    .then((result) => {
+      if (result.length === 0) {
+        return response.status(404).send({ message: 'Records not found' });
+      } else {
+        console.log(result.rows);
+        return response.send({
+          records: result.rows,
+          numPages: Math.ceil(result.count / limit),
+        });
+      }
+    })
+    .catch((error) => next(error));
+});
+
+// Logged-in user can post a Record
+router.post('/artist/:id/record', auth, (request, response, next) => {
+  const auth =
+    request.headers.authorization && request.headers.authorization.split(' ');
+  const loggedInUserId = toData(auth[1]).userId;
+  const newRecord = {
+    title: request.body.title,
+    description: request.body.description,
+    format: request.body.format,
+    genre: request.body.genre,
+    img: request.body.img,
+    artistId: parseInt(request.params.id),
+    userId: loggedInUserId,
+  };
+
+  Record.create(newRecord)
+    .then((result) => {
+      //console.log('result', result.dataValues);
+      return response.status(201).send(result);
+    })
+    .catch((error) => next(error));
 });
 
 // Logged-in user can edit a Record he/she posted

@@ -3,6 +3,7 @@ const router = new Router();
 const Artist = require('../Models/Artist');
 const auth = require('../auth/authMiddleware');
 
+// Logged-in user can add a new artist
 router.post('/artist', auth, (request, response, next) => {
   const newArtist = {
     name: request.body.name,
@@ -13,6 +14,7 @@ router.post('/artist', auth, (request, response, next) => {
     .catch(next);
 });
 
+// Anyone can view an artist
 router.get('/artist/:id', (request, response, next) => {
   Artist.findByPk(parseInt(request.params.id))
     .then((artist) => {
@@ -25,6 +27,7 @@ router.get('/artist/:id', (request, response, next) => {
     .catch((error) => next(error));
 });
 
+// Anyone can view a list of artists
 router.get('/artists', (request, response, next) => {
   Artist.findAll()
     .then((artists) => {

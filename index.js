@@ -10,8 +10,6 @@ const cors = require('cors');
 const corsMiddleware = cors();
 const bodyParser = require('body-parser');
 const parserMiddleware = bodyParser.json();
-
-// Use middleware
 app.use(corsMiddleware);
 app.use(parserMiddleware);
 
@@ -27,10 +25,9 @@ const routerUser = require('./Routers/routerUser');
 const routerArtist = require('./Routers/routerArtist');
 const routerRecord = require('./Routers/routerRecord');
 const routerComment = require('./Routers/routerComment');
-
 app.use(authRouter, routerUser, routerRecord, routerArtist, routerComment);
 
-// Sync Db and create default data
+// Sync Db
 db.sync({ force: false })
   .then(() => console.log('Database successfully created'))
   .catch((error) => {
@@ -40,9 +37,7 @@ db.sync({ force: false })
 
 // Port set-up
 const port = process.env.PORT || 4000;
-
 function onListen() {
   console.log(`Listening on :${port}`);
 }
-
 app.listen(port, onListen);

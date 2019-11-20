@@ -14,7 +14,7 @@ router.post('/login', (request, response) => {
       message: 'Please supply a valid email and password',
     });
   } else {
-    // 1. find user based on email address
+    // 1. finds user based on email address
     User.findOne({
       where: {
         email: email,
@@ -26,9 +26,9 @@ router.post('/login', (request, response) => {
             message: 'User with that email address does not exist',
           });
         }
-        // 2. use bcrypt.compareSync to check the password against the stored hash
+        // 2. Uses bcrypt.compareSync to check the password against the stored hash
         else if (bcrypt.compareSync(request.body.password, entity.password)) {
-          // 3. if the password is correct, return a JWT with the userId of the user (user.id)
+          // 3. If the password is correct, returns a JWT with the userId of the user
           response.send({
             jwt: toJWT({ userId: entity.id }),
             username: entity.username,

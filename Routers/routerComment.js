@@ -5,11 +5,10 @@ const Comment = require('../Models/Comment');
 const auth = require('../auth/authMiddleware');
 const { toData } = require('../auth/jwt');
 
-// Logged-in user can post a comment on a Record (auth)
-router.post('/record/:id/comments', auth, (request, response, next) => {
+// Logged-in user can post a comment on a Record resource
+router.post('/record/:id/comment', auth, (request, response, next) => {
   const auth =
     request.headers.authorization && request.headers.authorization.split(' ');
-  // Convert token to readable data and store only the userId
   const loggedInUserId = toData(auth[1]).userId;
 
   Record.findByPk(parseInt(request.params.id))
@@ -31,7 +30,7 @@ router.post('/record/:id/comments', auth, (request, response, next) => {
     .catch((error) => next(error));
 });
 
-// Anyone can see all comments for a Record resource
+// Anyone can view all comments for a Record resource
 router.get('/record/:id/comments', (request, response, next) => {
   Record.findByPk(parseInt(request.params.id))
     .then((record) => {

@@ -5,12 +5,11 @@ const Artist = require('../Models/Artist');
 const auth = require('../auth/authMiddleware');
 const { toData } = require('../auth/jwt');
 
-// Logged in user can post a Record (auth)
+// Logged-in user can post a Record
 router.post('/artist/:id/record', auth, (request, response, next) => {
   const auth =
     request.headers.authorization && request.headers.authorization.split(' ');
   const loggedInUserId = toData(auth[1]).userId;
-
   const newRecord = {
     title: request.body.title,
     description: request.body.description,
@@ -42,11 +41,10 @@ router.get('/record/:id', (request, response, next) => {
     .catch((error) => next(error));
 });
 
-// Anyone can see all Records for a specific artist
+// Anyone can view all Records for a given artist
 router.get('/artist/:id/records', (request, response, next) => {
   Artist.findByPk(parseInt(request.params.id)).then(() => {
     const artistId = request.params.id;
-    // Show latest added Records first
     Record.findAll({ where: { artistId }, order: [['createdAt', 'DESC']] })
       .then((records) => {
         if (records.length === 0) {
@@ -61,7 +59,7 @@ router.get('/artist/:id/records', (request, response, next) => {
   });
 });
 
-// Logged in user can edit a Record he/she posted
+// Logged-in user can edit a Record he/she posted
 router.put('/record/:id', auth, (request, response, next) => {
   const { title, description, format, genre, img } = request.body;
   Record.findByPk(parseInt(request.params.id))
@@ -97,7 +95,7 @@ router.put('/record/:id', auth, (request, response, next) => {
     .catch((error) => next(error));
 });
 
-// Logged in user can delete a Record he/she posted (auth, identify the user)
+// Logged-in user can delete a Record he/she posted
 router.delete('/record/:id', auth, (request, response) => {
   Record.findByPk(parseInt(request.params.id))
     .then((record) => {

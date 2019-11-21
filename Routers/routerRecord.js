@@ -49,7 +49,7 @@ router.get('/records/page/:num', (request, response, next) => {
       if (result.length === 0) {
         return response.status(404).send({ message: 'Records not found' });
       } else {
-        console.log(result.rows);
+        // console.log(result.rows);
         return response.send({
           records: result.rows,
           numPages: Math.ceil(result.count / limit),

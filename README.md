@@ -32,7 +32,7 @@ App UI: users can sign-up and login, post records they wish to exchange, post co
 
 5. Checkout the **[Client ReadMe](https://github.com/future-ruins/vinyl-club-client/blob/master/README.md)** to install and run the client.
 
-6. Testing: As a standard, port 4000 is being used for this server. Dummy data will automatically be added to your database, if you are currently running nodemon with the command mentioned above (`nodemon index`). Otherwise, you can simply run `node index` in your terminal.
+6. Testing: As a standard, port 4000 is being used for this server. Dummy data for all models will automatically be added to your database, if you are currently running nodemon with the command mentioned above (`nodemon index`). Otherwise, you can simply run `node index` in your terminal.
 
 ## Technologies used
 

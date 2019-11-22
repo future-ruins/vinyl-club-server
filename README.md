@@ -4,7 +4,7 @@
 
 Vinyl Club is a project built in 3 days for practice purposes. The idea was to build a simple app that allows local registered users / record collectors to exchange vinyl records from their collections.
 
-**[Related repos: Vinyl Club App Client](https://github.com/future-ruins/vinyl-club-client)**
+**[Related repos: Vinyl Club App Client]()**
 App UI: users can sign-up and login, post records they wish to exchange, post comments on a record, contact other users for exchange purposes.
 
 ## Table of contents:

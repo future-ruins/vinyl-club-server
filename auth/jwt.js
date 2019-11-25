@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-// Set secret encryption key
+// Sets secret key
 const secret =
   process.env.JWT_SECRET || 'e9rp^&^*&@9sejg)DSUA)jpfds8394jdsfn,m';
 

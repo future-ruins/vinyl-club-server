@@ -34,6 +34,7 @@ const createDummyPassword = () => {
 };
 
 // Sync Db and add dummy data
+// Force true for testing purposes
 db.sync({ force: true })
   .then(() => console.log('Database successfully created'))
   .then(() =>

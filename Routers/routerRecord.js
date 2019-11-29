@@ -36,27 +36,20 @@ router.get('/artist/:id/records', (request, response, next) => {
   });
 });
 
-// Anyone can view all Records (9 per page)
-router.get('/records/page/:num', (request, response, next) => {
-  const page = parseInt(request.params.num);
-  const limit = 9;
+// Anyone can view all Records (10 per page)
+router.get('/records', (request, response, next) => {
+  const page = request.query.page || 1;
+  const limit = 10;
   let offset = 0;
-  if (page >= 1) {
-    offset = page * limit;
+  if (page > 1) {
+    offset = (page - 1) * limit;
   }
-  Record.findAndCountAll({ limit, offset, order: [['createdAt', 'DESC']] })
+  Record.findAndCountAll({ offset, limit, order: [['createdAt', 'DESC']] })
     .then((result) => {
-      if (result.length === 0) {
-        return response.status(404).send({ message: 'Records not found' });
-      } else {
-        // console.log(result.rows);
-        return response.send({
-          records: result.rows,
-          numPages: Math.ceil(result.count / limit),
-        });
-      }
+      const pages = Math.ceil(result.count / limit);
+      response.status(200).send({ ...result, pages });
     })
-    .catch((error) => next(error));
+    .catch(next);
 });
 
 // Logged-in user can post a Record

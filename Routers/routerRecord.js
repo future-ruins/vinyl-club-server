@@ -37,12 +37,12 @@ router.get('/artist/:id/records', (request, response, next) => {
 });
 
 // Anyone can view all Records (10 per page)
-router.get('/records/page/:num', (request, response, next) => {
-  const page = parseInt(request.params.num);
+router.get('/records', (request, response, next) => {
+  const page = request.query.page || 1;
   const limit = 10;
   let offset = 0;
-  if (page >= 1) {
-    offset = page * limit;
+  if (page > 1) {
+    offset = (page - 1) * limit;
   }
   Record.findAndCountAll({ offset, limit, order: [['createdAt', 'DESC']] })
     .then((result) => {

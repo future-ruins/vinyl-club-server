@@ -36,10 +36,10 @@ router.get('/artist/:id/records', (request, response, next) => {
   });
 });
 
-// Anyone can view all Records (10 per page)
+// Anyone can view all Records (9 per page)
 router.get('/records', (request, response, next) => {
   const page = request.query.page || 1;
-  const limit = 10;
+  const limit = 9;
   let offset = 0;
   if (page > 1) {
     offset = (page - 1) * limit;
@@ -48,6 +48,7 @@ router.get('/records', (request, response, next) => {
     .then((result) => {
       const pages = Math.ceil(result.count / limit);
       response.status(200).send({ ...result, pages });
+      // console.log(result.rows);
     })
     .catch(next);
 });

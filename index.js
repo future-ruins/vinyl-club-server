@@ -189,6 +189,46 @@ db.sync({ force: true })
         artistId: 1,
         userId: 1,
       },
+      {
+        title: 'Consectetur adipiscing',
+        description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec placerat eu lectus nec facilisis.',
+        format: 12,
+        genre: 'Funk, Soul',
+        img: 'https://tinyurl.com/r9ewhor',
+        artistId: 2,
+        userId: 2,
+      },
+      {
+        title: 'Donec placerat',
+        description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec placerat eu lectus nec facilisis.',
+        format: 12,
+        genre: 'Funk, Soul',
+        img: 'https://tinyurl.com/td56za5',
+        artistId: 1,
+        userId: 1,
+      },
+      {
+        title: 'Purple Rain',
+        description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec placerat eu lectus nec facilisis.',
+        format: 12,
+        genre: 'Funk, Soul',
+        img: 'https://tinyurl.com/tna88hn',
+        artistId: 1,
+        userId: 1,
+      },
+      {
+        title: 'Silver Vibrations ',
+        description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec placerat eu lectus nec facilisis.',
+        format: 12,
+        genre: 'Funk, Soul',
+        img: 'https://tinyurl.com/t3eruvg',
+        artistId: 2,
+        userId: 2,
+      },
     ])
   )
   .then(() =>

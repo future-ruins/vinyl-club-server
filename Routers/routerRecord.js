@@ -6,16 +6,6 @@ const User = require('../Models/User');
 const auth = require('../auth/authMiddleware');
 const { toData } = require('../auth/jwt');
 
-// User.findAll({
-//   include: [{
-//     model: Project,
-//     through: {
-//       attributes: ['createdAt', 'startedAt', 'finishedAt'],
-//       where: {completed: true}
-//     }
-//   }]
-// });
-
 // Anyone can read a single Record resource
 router.get('/record/:id', (request, response, next) => {
   Record.findByPk(parseInt(request.params.id), {

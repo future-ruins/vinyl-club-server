@@ -15,6 +15,7 @@ router.get('/record/:id', (request, response, next) => {
       if (!record) {
         return response.status(404).send({ message: 'Record not found' });
       } else {
+        //console.log(record.dataValues.user.dataValues.username);
         return response.send(record);
       }
     })
@@ -32,7 +33,7 @@ router.get('/artist/:id/records', (request, response, next) => {
             .status(404)
             .send({ message: 'No Records for this artist' });
         } else {
-          return response.send(records);
+          return response.send({ records });
         }
       })
       .catch((error) => next(error));
@@ -54,6 +55,24 @@ router.get('/records', (request, response, next) => {
       // console.log(result.rows);
     })
     .catch(next);
+});
+
+// Anyone can view a User's record collection
+router.get('/user/:id/records', (request, response, next) => {
+  User.findByPk(parseInt(request.params.id)).then(() => {
+    const userId = request.params.id;
+    Record.findAll({ where: { userId }, order: [['createdAt', 'DESC']] })
+      .then((records) => {
+        if (records.length === 0) {
+          return response
+            .status(404)
+            .send({ message: 'No Records for this user' });
+        } else {
+          return response.send({ records });
+        }
+      })
+      .catch((error) => next(error));
+  });
 });
 
 // Logged-in user can post a Record

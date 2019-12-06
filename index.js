@@ -40,22 +40,22 @@ db.sync({ force: true })
   .then(() =>
     User.bulkCreate([
       {
-        username: 'testUser',
+        username: 'Joris',
         email: 'testUser@email.com',
         password: createDummyPassword(),
       },
       {
-        username: 'testUser1',
+        username: 'Ivana',
         email: 'testUser1@email.com',
         password: createDummyPassword(),
       },
       {
-        username: 'testUser2',
+        username: 'Moses',
         email: 'testUser2@email.com',
         password: createDummyPassword(),
       },
       {
-        username: 'testUser3',
+        username: 'Ramses',
         email: 'testUser3@email.com',
         password: createDummyPassword(),
       },

@@ -58,10 +58,15 @@ router.get('/records', (request, response, next) => {
 });
 
 // Anyone can view a User's record collection
+
 router.get('/user/:id/records', (request, response, next) => {
   User.findByPk(parseInt(request.params.id)).then(() => {
     const userId = request.params.id;
-    Record.findAll({ where: { userId }, order: [['createdAt', 'DESC']] })
+    Record.findAll({
+      include: [{ model: User, attributes: ['username'] }],
+      where: { userId },
+      order: [['createdAt', 'DESC']],
+    })
       .then((records) => {
         if (records.length === 0) {
           return response

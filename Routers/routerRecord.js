@@ -2,12 +2,25 @@ const { Router } = require('express');
 const router = new Router();
 const Record = require('../Models/Record');
 const Artist = require('../Models/Artist');
+const User = require('../Models/User');
 const auth = require('../auth/authMiddleware');
 const { toData } = require('../auth/jwt');
 
+// User.findAll({
+//   include: [{
+//     model: Project,
+//     through: {
+//       attributes: ['createdAt', 'startedAt', 'finishedAt'],
+//       where: {completed: true}
+//     }
+//   }]
+// });
+
 // Anyone can read a single Record resource
 router.get('/record/:id', (request, response, next) => {
-  Record.findByPk(parseInt(request.params.id))
+  Record.findByPk(parseInt(request.params.id), {
+    include: [{ model: User, attributes: ['username'] }],
+  })
     .then((record) => {
       if (!record) {
         return response.status(404).send({ message: 'Record not found' });

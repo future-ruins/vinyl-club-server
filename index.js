@@ -97,7 +97,7 @@ db.sync({ force: true })
         genre: 'Funk, Soul',
         img: 'https://tinyurl.com/w7dk644',
         artistId: 2,
-        userId: 2,
+        userId: 3,
       },
       {
         title: 'Disco stuff',
@@ -107,7 +107,7 @@ db.sync({ force: true })
         genre: 'Funk, Soul',
         img: 'https://tinyurl.com/td56za5',
         artistId: 1,
-        userId: 1,
+        userId: 4,
       },
       {
         title: 'Lorem ipsum',
